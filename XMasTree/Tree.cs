@@ -57,6 +57,19 @@ namespace XMasTree
             return Root.Search(value);
         }
 
+        public bool Delete(IComparable value)
+        {
+            if (Root.CompareTo(value) == 0)
+            {
+                Root = Root.Delete();
+                return true;
+            }
+            else
+            {
+                return Root.DeleteFromChildren(value);
+            }
+        }
+
         public override string ToString() => Root == null ? "" : Root.ToString();
     }
 }
