@@ -10,17 +10,67 @@ namespace XMasTree
     {
         static void Main(string[] args)
         {
-            Tree tree = new Tree(new IComparable[] {9,5,3,6,4,7,2,8,1,10});
-            Console.WriteLine(tree);
-            Console.WriteLine(tree.Delete(6));
-            Console.WriteLine(tree);
-            Console.WriteLine(tree.Delete(3));
-            Console.WriteLine(tree);
-            Console.WriteLine(tree.Delete(15));
-            Console.WriteLine(tree);
-            Console.WriteLine(tree.Delete(6));
-            Console.WriteLine(tree);
-            Console.ReadKey();
+            Tree tree = new Tree();
+            Random random = new Random();
+
+            while (true)
+            {
+                Console.Write("What to do? ");
+                string line = Console.ReadLine();
+
+                if (line=="list")
+                {
+                    Console.WriteLine(tree);
+                }
+
+                if (line == "insert")
+                {
+                    Console.Write("What to insert? ");
+                    tree.Insert(int.Parse(Console.ReadLine()));
+                }
+
+                if (line == "delete")
+                {
+                    Console.Write("What to delete? ");
+                    bool result = tree.Delete(int.Parse(Console.ReadLine()));
+                    Console.WriteLine(result ? "Deleted" : "Not found");
+                }
+
+                if (line == "search")
+                {
+                    Console.Write("What to search? ");
+                    IComparable result = tree.Search(int.Parse(Console.ReadLine()));
+                    Console.WriteLine("Found: "+(result==null?"Nothing":result));
+                }
+
+                if (line == "minimum")
+                {
+                    Console.WriteLine("The minimum is: "+tree.GetMinimum());
+                }
+
+                if (line == "maximum")
+                {
+                    Console.WriteLine("The minimum is: " + tree.GetMaximum());
+                }
+
+                if (line == "random")
+                {
+                    Console.Write("How many numbers? ");
+                    int count = int.Parse(Console.ReadLine());
+                    Console.Write("How large? ");
+                    int max = int.Parse(Console.ReadLine());
+                    for (int i = 0; i < count; i++)
+                    {
+                        tree.Insert(random.Next(max));
+                    }
+                }
+
+                if (line == "exit")
+                {
+                    Console.Write("Bye");
+                    break;
+                }
+            }
         }
     }
 }

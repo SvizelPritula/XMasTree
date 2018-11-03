@@ -99,7 +99,15 @@ namespace XMasTree
             }
         }
 
-        public IComparable Search(IComparable value) => SearchNode(value).Value;
+        public IComparable Search(IComparable value)
+        {
+            Node node = SearchNode(value);
+            if (node == null)
+            {
+                return null;
+            }
+            return node;
+        }
 
         public bool DeleteFromChildren(IComparable value) {
             int relativeValue = value.CompareTo(Value);

@@ -57,6 +57,10 @@ namespace XMasTree
             return Root.Search(value);
         }
 
+        public IComparable GetMinimum() => Root == null ? null : Root.GetMinimum();
+
+        public IComparable GetMaximum() => Root == null ? null : Root.GetMaximum();
+
         public bool Delete(IComparable value)
         {
             if (Root.CompareTo(value) == 0)
