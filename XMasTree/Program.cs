@@ -65,6 +65,16 @@ namespace XMasTree
                     }
                 }
 
+                if (line == "enum")
+                {
+                    foreach (object i in tree)
+                    {
+                        Console.Write(i);
+                        Console.Write(' ');
+                    }
+                    Console.WriteLine();
+                }
+
                 if (line == "exit")
                 {
                     Console.Write("Bye");

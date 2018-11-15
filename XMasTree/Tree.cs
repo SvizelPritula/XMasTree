@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,27 +7,27 @@ using System.Threading.Tasks;
 
 namespace XMasTree
 {
-    class Tree
+    class Tree<T> : IEnumerable where T : IComparable
     {
         public Node Root { get; private set; }
 
         public Tree() { }
 
-        public Tree(IComparable value) {
+        public Tree(T value) {
             Root = new Node(value);
         }
 
-        public Tree(IEnumerable<IComparable> values)
+        public Tree(IEnumerable<T> values)
         {
             Root = new Node(values);
         }
 
-        public Tree(IComparable[] values)
+        public Tree(T[] values)
         {
             Root = new Node(values);
         }
 
-        public void Insert(IComparable value)
+        public void Insert(T value)
         {
             if (Root == null)
             {
@@ -38,17 +39,17 @@ namespace XMasTree
             }
         }
 
-        public void Insert(IEnumerable<IComparable> values)
+        public void Insert(IEnumerable<T> values)
         {
-            foreach (IComparable value in values)
+            foreach (T value in values)
             {
                 Insert(value);
             }
         }
 
-        public void Insert(IComparable[] values) => Insert(values.AsEnumerable());
+        public void Insert(T[] values) => Insert(values.AsEnumerable());
 
-        public IComparable Search(IComparable value)
+        public T Search(T value)
         {
             if (Root == null)
             {
@@ -57,11 +58,11 @@ namespace XMasTree
             return Root.Search(value);
         }
 
-        public IComparable GetMinimum() => Root == null ? null : Root.GetMinimum();
+        public T GetMinimum() => Root == null ? null : Root.GetMinimum();
 
-        public IComparable GetMaximum() => Root == null ? null : Root.GetMaximum();
+        public T GetMaximum() => Root == null ? null : Root.GetMaximum();
 
-        public bool Delete(IComparable value)
+        public bool Delete(T value)
         {
             if (Root.CompareTo(value) == 0)
             {
@@ -75,5 +76,10 @@ namespace XMasTree
         }
 
         public override string ToString() => Root == null ? "" : Root.ToString();
+
+        public IEnumerator GetEnumerator()
+        {
+            return new TreeEnumerator(this);
+        }
     }
 }
