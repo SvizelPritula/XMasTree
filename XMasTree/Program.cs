@@ -10,7 +10,7 @@ namespace XMasTree
     {
         static void Main(string[] args)
         {
-            Tree tree = new Tree();
+            Tree<int> tree = new Tree<int>();
             Random random = new Random();
 
             while (true)
@@ -32,8 +32,7 @@ namespace XMasTree
                 if (line == "delete")
                 {
                     Console.Write("What to delete? ");
-                    bool result = tree.Delete(int.Parse(Console.ReadLine()));
-                    Console.WriteLine(result ? "Deleted" : "Not found");
+                    tree.Delete(int.Parse(Console.ReadLine()));
                 }
 
                 if (line == "search")

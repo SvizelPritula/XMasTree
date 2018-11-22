@@ -4,27 +4,28 @@ using System.Collections.Generic;
 
 namespace XMasTree
 {
-    internal class PrintableNode
+    internal class PrintableNode<T> where T : IComparable
     {
-        public Node Node;
+        public Node<T> Node;
         public bool Printed = false;
 
-        public PrintableNode(Node node)
+        public PrintableNode(Node<T> node)
         {
             Node = node;
         }
     }
-    class TreeEnumerator : IEnumerator
-    {
-        private Stack<PrintableNode> _stack = new Stack<PrintableNode>();
-        private Tree _tree;
 
-        public TreeEnumerator(Tree tree)
+    class TreeEnumerator<T> : IEnumerator where T : IComparable
+    {
+        private Stack<PrintableNode<T>> _stack = new Stack<PrintableNode<T>>();
+        private Tree<T> _tree;
+
+        public TreeEnumerator(Tree<T> tree)
         {
             _tree = tree;
             if (tree.Root != null)
             {
-                _stack.Push(new PrintableNode(tree.Root));
+                _stack.Push(new PrintableNode<T>(tree.Root));
             }
         }
 
@@ -32,7 +33,7 @@ namespace XMasTree
         {
             get
             {
-                return _stack.Peek().Node.Value;
+                return _stack.Count > 0 ?_stack.Peek().Node.Value : default(T);
             }
             
         }
@@ -53,7 +54,7 @@ namespace XMasTree
 
             if (_stack.Peek().Node.Right!=null)
             {
-                _stack.Push(new PrintableNode(_stack.Peek().Node.Right));
+                _stack.Push(new PrintableNode<T>(_stack.Peek().Node.Right));
                 SlideLeft();
             }
             else
@@ -78,13 +79,17 @@ namespace XMasTree
         {
             while (_stack.Peek().Node.Left != null)
             {
-                _stack.Push(new PrintableNode(_stack.Peek().Node.Left));
+                _stack.Push(new PrintableNode<T>(_stack.Peek().Node.Left));
             }
         }
 
         public void Reset()
         {
-            throw new System.NotImplementedException();
+            _stack.Clear();
+            if (_tree.Root != null)
+            {
+                _stack.Push(new PrintableNode<T>(_tree.Root));
+            }
         }
     }
 }

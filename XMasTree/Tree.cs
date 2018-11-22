@@ -9,33 +9,53 @@ namespace XMasTree
 {
     class Tree<T> : IEnumerable where T : IComparable
     {
-        public Node Root { get; private set; }
+        public Node<T> Root { get; private set; }
 
         public Tree() { }
 
         public Tree(T value) {
-            Root = new Node(value);
+            Root = new Node<T>(value);
         }
 
         public Tree(IEnumerable<T> values)
         {
-            Root = new Node(values);
+            foreach (T i in values)
+            {
+                if (Root == null)
+                {
+                    Root = new Node<T>(i);
+                }
+                else
+                {
+                    Insert(i);
+                }
+            }
         }
 
         public Tree(T[] values)
         {
-            Root = new Node(values);
+            foreach (T i in values)
+            {
+                if (Root == null)
+                {
+                    Root = new Node<T>(i);
+                }
+                else
+                {
+                    Insert(i);
+                }
+            }
         }
 
         public void Insert(T value)
         {
             if (Root == null)
             {
-                Root = new Node(value);
+                Root = new Node<T>(value);
             }
             else
             {
-                Root.Insert(value);
+                InsertIntoSubtree(Root, value);
             }
         }
 
@@ -47,39 +67,173 @@ namespace XMasTree
             }
         }
 
-        public void Insert(T[] values) => Insert(values.AsEnumerable());
-
-        public T Search(T value)
+        public void Insert(T[] values)
         {
-            if (Root == null)
+            foreach (T value in values)
             {
-                return null;
+                Insert(value);
             }
-            return Root.Search(value);
         }
 
-        public T GetMinimum() => Root == null ? null : Root.GetMinimum();
-
-        public T GetMaximum() => Root == null ? null : Root.GetMaximum();
-
-        public bool Delete(T value)
+        private void InsertIntoSubtree(Node<T> node, T value)
         {
-            if (Root.CompareTo(value) == 0)
+            if (node.Value.CompareTo(value)==0)
             {
-                Root = Root.Delete();
-                return true;
+                return;
+            }
+            else if (node.Value.CompareTo(value) < 0)
+            {
+                if (node.Right == null)
+                {
+                    node.Right = new Node<T>(value);
+                }
+                else
+                {
+                    InsertIntoSubtree(node.Right, value);
+                }
             }
             else
             {
-                return Root.DeleteFromChildren(value);
+                if (node.Left == null)
+                {
+                    node.Left = new Node<T>(value);
+                }
+                else
+                {
+                    InsertIntoSubtree(node.Left, value);
+                }
+            }
+        }
+
+        public T Search(T value) => Root == null ? default(T) : SearchSubtree(Root, value);
+
+        private T SearchSubtree(Node<T> node, T value)
+        {
+            if (node.Value.CompareTo(value) == 0)
+            {
+                return node.Value;
+            }
+            else if (node.Value.CompareTo(value) < 0)
+            {
+                if (node.Right == null)
+                {
+                    return default(T);
+                }
+                return SearchSubtree(node.Right, value);
+            }
+            else
+            {
+                if (node.Left == null)
+                {
+                    return default(T);
+                }
+                return SearchSubtree(node.Left, value);
+            }
+        }
+
+        public T GetMinimum() => Root == null ? default(T) : GetMinimumInSubtree(Root);
+
+        private T GetMinimumInSubtree(Node<T> node) => node.Left == null ? node.Value : GetMinimumInSubtree(node.Left);
+
+        public T GetMaximum() => Root == null ? default(T) : GetMaximumInSubtree(Root);
+
+        private T GetMaximumInSubtree(Node<T> node) => node.Right == null ? node.Value : GetMaximumInSubtree(node.Right);
+
+        public void Delete(T value)
+        {
+            if (Root != null)
+            {
+                Root = DeleteFromSubtree(Root, value);
+            }
+        }
+
+        private Node<T> DeleteFromSubtree(Node<T> node, T value)
+        {
+            if (node.Value.CompareTo(value) == 0)
+            {
+                return DeleteNode(node);
+            }
+            else if (node.Value.CompareTo(value) < 0)
+            {
+                if (node.Right != null)
+                {
+                    node.Right = DeleteFromSubtree(node.Right, value);
+                }
+            }
+            else
+            {
+                if (node.Left != null)
+                {
+                    node.Left = DeleteFromSubtree(node.Left, value);
+                }
+            }
+
+            return node;
+        }
+
+        public Node<T> DeleteNode(Node<T> node)
+        {
+            if (node.Left != null && node.Right != null)
+            {
+                Node<T> rightMinimum = node.Right;
+                while (rightMinimum.Left != null)
+                {
+                    rightMinimum = rightMinimum.Left;
+                }
+
+                DeleteFromSubtree(node.Right, rightMinimum.Value);
+
+                rightMinimum.Left = node.Left;
+                InsertNodeIntoSubtree(rightMinimum, node.Right);
+
+                return rightMinimum;
+            }
+
+            if (node.Left != null)
+            {
+                return node.Left;
+            }
+
+            if (node.Right != null)
+            {
+                return node.Right;
+            }
+
+            return null;
+        }
+
+        private void InsertNodeIntoSubtree(Node<T> node, Node<T> insert)
+        {
+            if (node.Value.CompareTo(insert.Value) == 0)
+            {
+                return;
+            }
+            else if (node.Value.CompareTo(insert.Value) < 0)
+            {
+                if (node.Right == null)
+                {
+                    node.Right = insert;
+                }
+                else
+                {
+                    InsertNodeIntoSubtree(node.Right, insert);
+                }
+            }
+            else
+            {
+                if (node.Left == null)
+                {
+                    node.Left = insert;
+                }
+                else
+                {
+                    InsertNodeIntoSubtree(node.Left, insert);
+                }
             }
         }
 
         public override string ToString() => Root == null ? "" : Root.ToString();
 
-        public IEnumerator GetEnumerator()
-        {
-            return new TreeEnumerator(this);
-        }
+        public IEnumerator GetEnumerator() => new TreeEnumerator<T>(this);
     }
 }
