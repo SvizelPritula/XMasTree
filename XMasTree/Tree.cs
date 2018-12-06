@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace XMasTree
 {
-    class Tree<T> : IEnumerable where T : IComparable
+    public class Tree<T> : IEnumerable where T : IComparable
     {
-        public Node<T> Root { get; private set; }
+        public Node<T> Root;
 
         public Tree() { }
 
@@ -105,19 +105,19 @@ namespace XMasTree
             }
         }
 
-        public T Search(T value) => Root == null ? default(T) : SearchSubtree(Root, value);
+        public bool Search(T value) => Root == null ? false : SearchSubtree(Root, value);
 
-        private T SearchSubtree(Node<T> node, T value)
+        private bool SearchSubtree(Node<T> node, T value)
         {
             if (node.Value.CompareTo(value) == 0)
             {
-                return node.Value;
+                return true;
             }
             else if (node.Value.CompareTo(value) < 0)
             {
                 if (node.Right == null)
                 {
-                    return default(T);
+                    return false;
                 }
                 return SearchSubtree(node.Right, value);
             }
@@ -125,7 +125,7 @@ namespace XMasTree
             {
                 if (node.Left == null)
                 {
-                    return default(T);
+                    return false;
                 }
                 return SearchSubtree(node.Left, value);
             }
@@ -171,7 +171,7 @@ namespace XMasTree
             return node;
         }
 
-        public Node<T> DeleteNode(Node<T> node)
+        private Node<T> DeleteNode(Node<T> node)
         {
             if (node.Left != null && node.Right != null)
             {

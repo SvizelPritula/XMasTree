@@ -15,7 +15,7 @@ namespace XMasTree
         }
     }
 
-    class TreeEnumerator<T> : IEnumerator where T : IComparable
+    public class TreeEnumerator<T> : IEnumerator where T : IComparable
     {
         private Stack<PrintableNode<T>> _stack = new Stack<PrintableNode<T>>();
         private Tree<T> _tree;

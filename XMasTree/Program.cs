@@ -38,8 +38,8 @@ namespace XMasTree
                 if (line == "search")
                 {
                     Console.Write("What to search? ");
-                    IComparable result = tree.Search(int.Parse(Console.ReadLine()));
-                    Console.WriteLine("Found: "+(result==null?"Nothing":result));
+                    bool result = tree.Search(int.Parse(Console.ReadLine()));
+                    Console.WriteLine(result?"Found":"Not found");
                 }
 
                 if (line == "minimum")

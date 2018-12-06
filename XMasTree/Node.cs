@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XMasTree
 {
-    class Node<T> where T : IComparable
+    public class Node<T> where T : IComparable
     {
         public T Value;
         public Node<T> Left;
