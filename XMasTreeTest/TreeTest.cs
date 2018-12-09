@@ -11,7 +11,7 @@ namespace XMasTreeTest
         Tree<int> tree;
         List<int> values=new List<int>();
 
-        public Random random = new Random();
+        Random random = new Random();
 
         [TestInitialize]
         public void TestInit()
@@ -34,9 +34,10 @@ namespace XMasTreeTest
         [TestMethod]
         public void ValueMatchTest()
         {
+            values.Sort();
             for (int i = 0; i<int.MaxValue; i++)
             {
-                if (values.Contains(i))
+                if (values.BinarySearch(i))
                 {
                     Assert.IsTrue(tree.Search(i), $"Value {i} was expected in tree.");
                 }
