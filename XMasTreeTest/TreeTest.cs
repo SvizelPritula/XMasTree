@@ -34,10 +34,9 @@ namespace XMasTreeTest
         [TestMethod]
         public void ValueMatchTest()
         {
-            values.Sort();
             for (int i = 0; i<int.MaxValue; i++)
             {
-                if (values.BinarySearch(i))
+                if (values.Contains(i))
                 {
                     Assert.IsTrue(tree.Search(i), $"Value {i} was expected in tree.");
                 }
