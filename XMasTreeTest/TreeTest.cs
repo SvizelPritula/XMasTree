@@ -8,6 +8,7 @@ namespace XMasTreeTest
     [TestClass]
     public class TreeTest
     {
+        int max = 1000;
         Tree<int> tree;
         List<int> values=new List<int>();
 
@@ -18,9 +19,9 @@ namespace XMasTreeTest
         {
             values.Clear();
 
-            while (values.Count<int.MaxValue/2)
+            while (values.Count < max / 2)
             {
-                int value = random.Next();
+                int value = random.Next(max);
 
                 if (!values.Contains(value))
                 {
@@ -34,7 +35,7 @@ namespace XMasTreeTest
         [TestMethod]
         public void ValueMatchTest()
         {
-            for (int i = 0; i<int.MaxValue; i++)
+            for (int i = 0; i < max; i++)
             {
                 if (values.Contains(i))
                 {
@@ -50,9 +51,9 @@ namespace XMasTreeTest
         [TestMethod]
         public void InsertTest()
         {
-            for (int i = 0; i < int.MaxValue / 2; i++)
+            for (int i = 0; i < max / 2; i++)
             {
-                int value = random.Next();
+                int value = random.Next(max);
                 values.Add(value);
 
                 tree.Insert(value);
@@ -65,9 +66,9 @@ namespace XMasTreeTest
         [TestMethod]
         public void DeleteTest()
         {
-            for (int i = 0; i < int.MaxValue / 2; i++)
+            for (int i = 0; i < max / 2; i++)
             {
-                int value = random.Next();
+                int value = random.Next(max);
                 values.Remove(value);
 
                 tree.Delete(value);
@@ -82,14 +83,14 @@ namespace XMasTreeTest
         {
             values.Sort();
 
-            for (int i = 0; i < int.MaxValue / 8; i++)
+            for (int i = 0; i < max / 8; i++)
             {
                 Assert.AreEqual(tree.GetMinimum(), values[0], $"Reported minimum was {tree.GetMinimum()}, {values[0]} expected.");
                 tree.Delete(tree.GetMinimum());
                 values.Remove(values[0]);
             }
 
-            for (int i = 0; i < int.MaxValue / 8; i++)
+            for (int i = 0; i < max / 8; i++)
             {
                 Assert.AreEqual(tree.GetMaximum(), values[values.Count-1], $"Reported maximum was {tree.GetMaximum()}, {values[values.Count - 1]} expected.");
                 tree.Delete(tree.GetMaximum());
